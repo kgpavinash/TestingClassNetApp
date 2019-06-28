@@ -113,7 +113,7 @@ namespace TestingClassNetApp
         static void Test1()
         {
             GoogleVisionResults g = new GoogleVisionResults();
-            string sourceDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testSource\";
+            string sourceDirectory = @"\\hbm001inddat001\d$\Large Data Folders\Unique Container Label Images For OnBase Completed";
             string destinationParent = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testDestination\";
             string destinationErrorDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testErrorDestination\";
             string destinationEmptyDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testEmptyDestination\";
@@ -121,7 +121,7 @@ namespace TestingClassNetApp
             string destinationEmptyDetectDocumentTextDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testEmptyDetectDocumentTextDirectory\";
             string[] files = Directory.GetFiles(sourceDirectory,"*.jpg");
             string srcFileName = null, srcFileNameNoExt = null, srcFileExtension = null, srcFilePath = null, srcDirectoryName = null, destinationFile = null, destination = null;
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 try
                 {
