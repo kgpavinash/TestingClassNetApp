@@ -121,6 +121,8 @@ namespace TestingClassNetApp
             string destinationEmptyDetectDocumentTextDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testEmptyDetectDocumentTextDirectory\";
             string[] files = Directory.GetFiles(sourceDirectory,"*.jpg");
             string srcFileName = null, srcFileNameNoExt = null, srcFileExtension = null, srcFilePath = null, srcDirectoryName = null, destinationFile = null, destination = null;
+            string logText = null;
+
             for (int i = 0; i < 1000; i++)
             {
                 try
@@ -154,7 +156,7 @@ namespace TestingClassNetApp
                         File.Move(srcDirectoryName + "\\" + srcFileNameNoExt + ".okf", destinationErrorDirectory + srcFileNameNoExt + "\\" + srcFileNameNoExt + ".okf");
                         Directory.Delete(destinationParent + srcFileNameNoExt, true);
                     }
-                    catch
+                    catch //Deals with the case if the image file is already moved to destination. Reverts it back to original directory
                     {
                         if (File.Exists(destinationFile))
                         {
@@ -162,12 +164,24 @@ namespace TestingClassNetApp
                             i = i + 1;
                         }
                         Directory.Delete(destinationParent + srcFileNameNoExt, true);
+                        Directory.Delete(destinationErrorDirectory + srcFileNameNoExt,true);
+                        logText = "In Catch for ImageEmptyOrCorruptException.Reverting image to original destination. " + srcFileNameNoExt;
+                        File.WriteAllText(@"WriteText.txt", logText);
                     }
 
                 }
                 catch (FileNotFoundException e)    //Error if Source File is not not valid OR if no access to File/Directory
                 {
                     Console.WriteLine(e.Message);
+                    if (File.Exists(destinationFile))
+                    {
+                        File.Move(destinationFile, srcFilePath);
+                        i = i + 1;
+                    }
+                    Directory.Delete(destinationParent + srcFileNameNoExt, true);
+                    //Directory.Delete(destinationErrorDirectory + srcFileNameNoExt, true);
+                    logText = "In Catch for FileNotFoundException.Reverting image to original destination. " + srcFileNameNoExt;
+                    File.WriteAllText(@"WriteText.txt", logText);
                     Console.ReadKey();
                     break;
                 }
@@ -186,6 +200,11 @@ namespace TestingClassNetApp
                 catch (AnnotateImageException e)    //Error if Google Cloud Services has problems.
                 {
                     Console.WriteLine(e.Message);
+                    Directory.CreateDirectory(destinationErrorDirectory + srcFileNameNoExt);
+                    destinationFile = destinationErrorDirectory + srcFileNameNoExt + "\\" + srcFileName;
+                    File.Move(srcFilePath, destinationFile);
+                    File.Move(srcDirectoryName + "\\" + srcFileNameNoExt + ".okf", destinationErrorDirectory + srcFileNameNoExt + "\\" + srcFileNameNoExt + ".okf"); //What if no okf
+                    Directory.Delete(destinationParent + srcFileNameNoExt, true);
                     Console.ReadKey();
                     break;
                 }
@@ -209,6 +228,8 @@ namespace TestingClassNetApp
                         }
                         Directory.Delete(destinationParent + srcFileNameNoExt, true);
                         Directory.Delete(destinationEmptyDirectory + srcFileNameNoExt, true);
+                        logText = "In Catch for EmptyResultsException.Reverting image to original destination. " + srcFileNameNoExt;
+                        File.WriteAllText(@"WriteText.txt", logText);
                     }
                 }
                 catch (EmptyDetectTextException e)
@@ -231,6 +252,8 @@ namespace TestingClassNetApp
                         }
                         Directory.Delete(destinationParent + srcFileNameNoExt, true);
                         Directory.Delete(destinationEmptyDetectTextDirectory + srcFileNameNoExt, true);
+                        logText = "In Catch for EmptyDetectTextException.Reverting image to original destination. " + srcFileNameNoExt;
+                        File.WriteAllText(@"WriteText.txt", logText);
                     }
                 }
                 catch (EmptyDetectDocumentTextException e)
@@ -253,6 +276,8 @@ namespace TestingClassNetApp
                         }
                         Directory.Delete(destinationParent + srcFileNameNoExt, true);
                         Directory.Delete(destinationEmptyDetectDocumentTextDirectory + srcFileNameNoExt, true);
+                        logText = "In Catch for EmptyDetectDocumentTextException.Reverting image to original destination. " + srcFileNameNoExt;
+                        File.WriteAllText(@"WriteText.txt", logText);
                     }
                 }
                 catch (Exception e)
@@ -264,7 +289,8 @@ namespace TestingClassNetApp
                         i = i + 1;
                     }
                     Directory.Delete(destinationParent + srcFileNameNoExt, true);
-
+                    logText = "In Catch for General Exception.Reverting image to original destination. " + srcFileNameNoExt;
+                    File.WriteAllText(@"WriteText.txt", logText);
                 }
             }
             Console.WriteLine("Finished");
