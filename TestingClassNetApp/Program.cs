@@ -120,10 +120,11 @@ namespace TestingClassNetApp
             string destinationEmptyDetectTextDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testEmptyDetectTextDirectory\";
             string destinationEmptyDetectDocumentTextDirectory = @"C:\Users\aprabhakar\Desktop\snakes\CVStuff\testEmptyDetectDocumentTextDirectory\";
             string[] files = Directory.GetFiles(sourceDirectory,"*.jpg");
+            int len = files.Length;
             string srcFileName = null, srcFileNameNoExt = null, srcFileExtension = null, srcFilePath = null, srcDirectoryName = null, destinationFile = null, destination = null;
             string logText = null;
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < len; i++)
             {
                 try
                 {
@@ -206,7 +207,6 @@ namespace TestingClassNetApp
                     File.Move(srcDirectoryName + "\\" + srcFileNameNoExt + ".okf", destinationErrorDirectory + srcFileNameNoExt + "\\" + srcFileNameNoExt + ".okf"); //What if no okf
                     Directory.Delete(destinationParent + srcFileNameNoExt, true);
                     Console.ReadKey();
-                    break;
                 }
                 catch (EmptyResultsException e)  //Error if no text was found by Google Vision.
                 {
